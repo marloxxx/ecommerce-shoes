@@ -1,6 +1,11 @@
 <?php
 require_once('../../config/koneksi.php');
 $id = $_GET['id'];
+$sql = "SELECT * FROM brand";
+$query = $con->prepare($sql);
+$query->execute();
+$result = $query->fetchAll(PDO::FETCH_ASSOC);
+
 $sql = "SELECT * FROM produk WHERE id='$id'";
 $query = $con->prepare($sql);
 $query->execute();
@@ -89,6 +94,20 @@ $data = $query->fetch();
                                 <div class="col-md-12">
                                     <label class="small mb-1" for="harga">Stok</label>
                                     <input class="form-control" id="stok" name="stok" type="text" placeholder="Harga" value="<?= $data['stok'] ?>" />
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (brand_produk)-->
+                                <div class="col-md-12">
+                                    <label class="small mb-1" for="brand_produk">Brand Produk</label>
+                                    <select class="form-control" id="brand_id" name="brand_id">
+                                        <option value="">Pilih Brand Produk</option>
+                                        <?php
+                                        foreach ($result as $row) {
+                                            echo "<option value='$row[id]' " . ($row['id'] == $data['brand_id'] ? 'selected' : '') . ">$row[nama]</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row gx-3 mb-3">

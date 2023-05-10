@@ -12,6 +12,13 @@
                         </div>
                         Dashboards
                     </a>
+                    <!-- Sidenav Link (Brand Produk)-->
+                    <a class="nav-link" href="../brand/index.php">
+                        <div class="nav-link-icon">
+                            <i data-feather="list"></i>
+                        </div>
+                        Brand Produk
+                    </a>
                     <!-- Sidenav Link (Produk)-->
                     <a class="nav-link" href="../produk/index.php">
                         <div class="nav-link-icon">

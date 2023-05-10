@@ -1,6 +1,6 @@
 <?php
 require_once('../../config/koneksi.php');
-$sql = "SELECT *, brand.nama as brand_produk FROM produk INNER JOIN brand ON produk.brand_id = brand.id";
+$sql = "SELECT * FROM brand";
 $query = $con->prepare($sql);
 $query->execute();
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -13,7 +13,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E-Commerce | Produk</title>
+    <title>E-Commerce | Jenis Produk</title>
     <link rel="icon" type="image/x-icon" href="../../public/backend/img/favicon.png" />
     <?php
     require_once('../include/head.php');
@@ -35,16 +35,16 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-auto mt-4">
                                 <h1 class="page-header-title">
                                     <div class="page-header-icon">
-                                        <i data-feather="shopping-bag"></i>
+                                        <i data-feather="list"></i>
                                     </div>
-                                    Produk
+                                    Brand Produk
                                 </h1>
-                                <div class="page-header-subtitle">Produk
+                                <div class="page-header-subtitle">Brand Produk
                                 </div>
                             </div>
                             <div class="col-12 col-xl-auto mt-4">
                                 <div class="btn-group">
-                                    <a href="create.php" class="btn btn-white">Tambah Produk</a>
+                                    <a href="create.php" class="btn btn-white">Tambah Brand Produk</a>
                                 </div>
                             </div>
                         </div>
@@ -54,58 +54,46 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
             <!-- Main page content-->
             <div class="container-xl px-4 mt-n10">
                 <div class="card mb-4">
-                    <div class="card-header">List Produk</div>
+                    <div class="card-header">List Brand Produk</div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="datatables" class="table" style="width: 100%">
-                                <thead>
+                        <table id="datatables" class="table" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $no = 1;
+                                foreach ($result as $row) {
+                                ?>
                                     <tr>
-                                        <th>No</th>
-                                        <th></th>
-                                        <th>Kode</th>
-                                        <th>Nama Produk</th>
-                                        <th>Brand</th>
-                                        <th>Harga</th>
-                                        <th>Stok</th>
-                                        <th>Aksi</th>
+                                        <td><?php echo $no++; ?></td>
+                                        <td><?php echo $row['nama']; ?></td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-warning">
+                                                    <span class="symbol-btn-group me-2">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </span>
+                                                    Ubah
+                                                </a>
+                                                <a href="javascript:;" onclick="deleteData(<?php echo $row['id']; ?>)" class="btn btn-danger">
+                                                    <span class="symbol-btn-group me-2">
+                                                        <i class="fa fa-trash"></i>
+                                                    </span>
+                                                    Hapus
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $no = 1;
-                                    foreach ($result as $row) {
-                                    ?>
-                                        <tr>
-                                            <td><?php echo $no++; ?></td>
-                                            <td><?php echo $row['kode']; ?></td>
-                                            <td><img src="../../public/images/produk/<?php echo $row['gambar']; ?>" width="100px"></td>
-                                            <td><?php echo $row['nama']; ?></td>
-                                            <td><?php echo $row['brand_produk']; ?></td>
-                                            <td><?php echo $row['harga']; ?></td>
-                                            <td><?php echo $row['stok']; ?></td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-warning">
-                                                        <span class="symbol-btn-group me-2">
-                                                            <i class="fa fa-pencil"></i>
-                                                        </span>
-                                                        Ubah
-                                                    </a>
-                                                    <a href="javascript:;" onclick="deleteData(<?php echo $row['id']; ?>)" class="btn btn-danger">
-                                                        <span class="symbol-btn-group me-2">
-                                                            <i class="fa fa-trash"></i>
-                                                        </span>
-                                                        Hapus
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

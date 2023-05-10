@@ -7,6 +7,7 @@ if ($_POST['action'] == 'tambah') {
     $nama = htmlspecialchars($_POST['nama']);
     $harga = htmlspecialchars($_POST['harga']);
     $stok = htmlspecialchars($_POST['stok']);
+    $brand_id = htmlspecialchars($_POST['brand_id']);
     $gambar = $_FILES['gambar']['name'];
     if (empty($kode)) {
         $response = array(
@@ -36,6 +37,14 @@ if ($_POST['action'] == 'tambah') {
         $response = array(
             'status' => 'error',
             'message' => 'Stok tidak boleh kosong'
+        );
+        echo json_encode($response);
+        return false;
+    }
+    if (empty($brand_id)) {
+        $response = array(
+            'status' => 'error',
+            'message' => 'Brand Produk tidak boleh kosong'
         );
         echo json_encode($response);
         return false;
@@ -59,7 +68,7 @@ if ($_POST['action'] == 'tambah') {
         move_uploaded_file($file_tmp, '../../public/images/produk/' . $nama_gambar_baru);
     }
     //   insert data using PDO
-    $sql = "INSERT INTO produk (kode, nama, harga, stok, gambar) VALUES ('$kode', '$nama', '$harga', '$stok', '$nama_gambar_baru')";
+    $sql = "INSERT INTO produk (kode, nama, harga, stok, brand_id, gambar) VALUES ('$kode', '$nama', '$harga', '$stok', '$brand_id', '$nama_gambar_baru')";
     $query = $con->prepare($sql);
     $query->execute();
     if ($query) {
@@ -81,6 +90,7 @@ if ($_POST['action'] == 'tambah') {
     $nama = htmlspecialchars($_POST['nama']);
     $harga = htmlspecialchars($_POST['harga']);
     $stok = htmlspecialchars($_POST['stok']);
+    $brand_id = htmlspecialchars($_POST['brand_id']);
     $gambar = $_FILES['gambar']['name'];
     if (empty($kode)) {
         $response = array(
@@ -113,6 +123,14 @@ if ($_POST['action'] == 'tambah') {
         echo json_encode($response);
         return false;
     }
+    if (empty($brand_id)) {
+        $response = array(
+            'status' => 'error',
+            'message' => 'Brand Produk tidak boleh kosong'
+        );
+        echo json_encode($response);
+        return false;
+    }
     if (!empty($gambar)) {
         //  upload gambar
         $ekstensi_diperbolehkan    = array('png', 'jpg');
@@ -132,7 +150,7 @@ if ($_POST['action'] == 'tambah') {
             move_uploaded_file($file_tmp, '../../public/images/produk/' . $nama_gambar_baru);
         }
         //   update data using PDO
-        $sql = "UPDATE produk SET kode = '$kode', nama = '$nama', harga = '$harga', stok = '$stok', gambar = '$nama_gambar_baru' WHERE id = '$id'";
+        $sql = "UPDATE produk SET kode = '$kode', nama = '$nama', harga = '$harga', stok = '$stok', brand_id = '$brand_id', gambar = '$nama_gambar_baru' WHERE id = '$id'";
         $query = $con->prepare($sql);
         $query->execute();
         if ($query) {

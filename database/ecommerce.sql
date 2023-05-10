@@ -24,6 +24,15 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `brand`
+--
+
+CREATE TABLE `brand` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- Table structure for table `pesanan`
 --
 
@@ -49,7 +58,8 @@ CREATE TABLE `produk` (
   `nama` varchar(45) NOT NULL,
   `harga` double NOT NULL,
   `stok` int(11) NOT NULL,
-  `gambar` varchar(45) NOT NULL
+  `gambar` varchar(45) NOT NULL,
+  `brand_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -73,6 +83,12 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for dumped tables
 --
 
+-- 
+-- AUTO_INCREMENT for table `brand`
+-- 
+ALTER TABLE `brand`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  
 --
 -- AUTO_INCREMENT for table `pesanan`
 --

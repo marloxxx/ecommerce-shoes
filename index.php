@@ -1,9 +1,9 @@
 <?php
 include 'config/koneksi.php';
-$sql = "SELECT * FROM produk";
+$sql = "SELECT * FROM brand";
 $query = $con->prepare($sql);
 $query->execute();
-$result = $query->fetchAll(PDO::FETCH_ASSOC);
+$brands = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -298,54 +298,79 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <?php foreach ($result as $key => $row) : ?>
-                            <div class="col-sm-6 col-lg-3">
-                                <!--== Start Product Item ==-->
-                                <div class="product-item">
-                                    <div class="inner-content">
-                                        <div class="product-thumb">
-                                            <a href="detail.php?id=<?= $row['id'] ?>">
-                                                <img src="public/images/produk/<?= $row['gambar'] ?>" width="270" height="274" alt="Image-HasTech">
-                                            </a>
-                                            <div class="product-flag">
-                                                <!-- <ul>
+
+
+                    <ul class="nav nav-tabs" id="#myTab">
+                        <?php foreach ($brands as $key => $row) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link <?= $key == 0 ? 'active' : '' ?>" data-bs-toggle="tab" href="#<?= $row['nama'] ?>"><?= $row['nama'] ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <div class="tab-content">
+                        <?php foreach ($brands as $key => $row) : ?>
+                            <div class="tab-pane fade container <?= $key == 0 ? 'show active' : '' ?>" id="<?= $row['nama'] ?>">
+                                <div class="row">
+                                    <?php
+                                    $sql = "SELECT * FROM produk WHERE brand_id = :id_brand";
+                                    $query = $con->prepare($sql);
+                                    $query->bindParam(':id_brand', $row['id']);
+                                    $query->execute();
+                                    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($result as $produk) :
+                                    ?>
+                                        <div class="col-sm-6 col-lg-3">
+                                            <!--== Start Product Item ==-->
+                                            <div class="product-item">
+                                                <div class="inner-content">
+                                                    <div class="product-thumb">
+                                                        <a href="detail.php?id=<?= $produk['id'] ?>">
+                                                            <img src="public/images/produk/<?= $produk['gambar'] ?>" width="270" height="274" alt="Image-HasTech">
+                                                        </a>
+                                                        <div class="product-flag">
+                                                            <!-- <ul>
                                                     <li class="discount">-10%</li>
                                                 </ul> -->
-                                            </div>
-                                            <div class="product-action">
-                                                <!-- <a class="btn-product-wishlist" href=""><i class="fa fa-heart"></i></a> -->
-                                                <!-- <a class="btn-product-cart" href="shop-cart.html"><i class="fa fa-shopping-cart"></i></a> -->
-                                                <!-- <button type="button" class="btn-product-quick-view-open">
+                                                        </div>
+                                                        <div class="product-action">
+                                                            <!-- <a class="btn-product-wishlist" href=""><i class="fa fa-heart"></i></a> -->
+                                                            <!-- <a class="btn-product-cart" href="shop-cart.html"><i class="fa fa-shopping-cart"></i></a> -->
+                                                            <!-- <button type="button" class="btn-product-quick-view-open">
                                                     <i class="fa fa-arrows"></i>
                                                 </button> -->
-                                                <!-- <a class="btn-product-compare" href="shop-compare.html"><i class="fa fa-random"></i></a> -->
+                                                            <!-- <a class="btn-product-compare" href="shop-compare.html"><i class="fa fa-random"></i></a> -->
+                                                        </div>
+                                                        <a class="banner-link-overlay" href="javascript:;"></a>
+                                                    </div>
+                                                    <div class="product-info">
+                                                        <!-- <div class="category">
+                                                            <ul>
+                                                                <li><a href="javascript:;">Men</a></li>
+                                                                <li class="sep">/</li>
+                                                                <li><a href="javascript:;">Women</a></li>
+                                                            </ul>
+                                                        </div> -->
+                                                        <h4 class="title">
+                                                            <a href="detail.php?id=<?= $produk['id'] ?>">
+                                                                <?= $produk['nama'] ?>
+                                                            </a>
+                                                        </h4>
+                                                        <div class="prices">
+                                                            <span class="price">Rp. <?= number_format($produk['harga'], 0, ',', '.') ?></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <a class="banner-link-overlay" href="javascript:;"></a>
+                                            <!--== End prPduct Item ==-->
                                         </div>
-                                        <div class="product-info">
-                                            <div class="category">
-                                                <ul>
-                                                    <li><a href="javascript:;">Men</a></li>
-                                                    <li class="sep">/</li>
-                                                    <li><a href="javascript:;">Women</a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="title">
-                                                <a href="detail.php?id=<?= $row['id'] ?>">
-                                                    <?= $row['nama'] ?>
-                                                </a>
-                                            </h4>
-                                            <div class="prices">
-                                                <span class="price">Rp. <?= number_format($row['harga'], 0, ',', '.') ?></span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php endforeach; ?>
                                 </div>
-                                <!--== End prPduct Item ==-->
                             </div>
                         <?php endforeach; ?>
                     </div>
+                    <script>
+
+                    </script>
                 </div>
             </section>
             <!--== End Product Area Wrapper ==-->
@@ -414,13 +439,13 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                                                             <a class="banner-link-overlay" href="javascript:;"></a>
                                                         </div>
                                                         <div class="product-info">
-                                                            <div class="category">
+                                                            <!-- <div class="category">
                                                                 <ul>
                                                                     <li><a href="javascript:;">Men</a></li>
                                                                     <li class="sep">/</li>
                                                                     <li><a href="javascript:;">Women</a></li>
                                                                 </ul>
-                                                            </div>
+                                                            </div> -->
                                                             <h4 class="title"><a href="detail.php?id=<?= $row['id'] ?>"><?= $row['nama'] ?></a></h4>
                                                             <div class="prices">
                                                                 <span class="price">Rp. <?= number_format($row['harga'], 0, ',', '.') ?></span>
@@ -538,7 +563,14 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
     <!--=== jQuery Custom Js ===-->
     <script src="public/frontend/js/custom.js"></script>
-
+    <script>
+        $(document).ready(function() {
+            $("#myTab a").click(function(e) {
+                e.preventDefault();
+                $(this).tab("show");
+            });
+        });
+    </script>
 </body>
 
 </html>

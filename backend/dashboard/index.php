@@ -1,5 +1,9 @@
 <?php
 require_once('../../config/koneksi.php');
+$sql = "SELECT * FROM brand";
+$query = $con->prepare($sql);
+$query->execute();
+$brand = $query->rowCount();
 $sql = "SELECT * FROM produk";
 $query = $con->prepare($sql);
 $query->execute();
@@ -53,15 +57,15 @@ $pesanan = $query->rowCount();
             <div class="container-xl px-4 mt-n10">
                 <!-- Example Colored Cards for Dashboard Demo-->
                 <div class="row">
-                    <div class="col-lg-6 col-xl-6 mb-4">
+                    <div class="col-lg-4 col-xl-4 mb-4">
                         <div class="card bg-primary text-white h-100">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="me-3">
-                                        <div class="text-white-75 small">Total Produk</div>
-                                        <div class="text-lg fw-bold"><?= $produk ?></div>
+                                        <div class="text-white-75 small">Total Brand Produk</div>
+                                        <div class="text-lg fw-bold"><?= $brand ?></div>
                                     </div>
-                                    <i class="feather-xl text-white-50" data-feather="box"></i>
+                                    <i class="feather-xl text-white-50" data-feather="list"></i>
                                 </div>
                             </div>
                             <div class=" card-footer d-flex align-items-center justify-content-between small">
@@ -69,7 +73,23 @@ $pesanan = $query->rowCount();
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-xl-6 mb-4">
+                    <div class="col-lg-4 col-xl-4 mb-4">
+                        <div class="card bg-warning text-white h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="me-3">
+                                        <div class="text-white-75 small">Total Produk</div>
+                                        <div class="text-lg fw-bold"><?= $produk ?></div>
+                                    </div>
+                                    <i class="feather-xl text-white-50" data-feather="shopping-bag"></i>
+                                </div>
+                            </div>
+                            <div class=" card-footer d-flex align-items-center justify-content-between small">
+                                <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-xl-4 mb-4">
                         <div class="card bg-success text-white h-100">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">

@@ -1,9 +1,10 @@
 <?php
 require_once('../../config/koneksi.php');
-$sql = "SELECT * FROM brand";
+$id = $_GET['id'];
+$sql = "SELECT * FROM jenis_produk WHERE id = '$id'";
 $query = $con->prepare($sql);
 $query->execute();
-$result = $query->fetchAll(PDO::FETCH_ASSOC);
+$result = $query->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +14,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E-Commerce | Jenis Produk</title>
+    <title>E-Commerce | Brand Produk</title>
     <link rel="icon" type="image/x-icon" href="../../public/backend/img/favicon.png" />
     <?php
     require_once('../include/head.php');
@@ -35,13 +36,13 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-auto mb-3">
                                 <h1 class="page-header-title">
                                     <div class="page-header-icon">
-                                        <i data-feather="shopping-bag"></i>
+                                        <i data-feather="list"></i>
                                     </div>
-                                    Tambah Jenis Produk
+                                    Edit Brand Produk
                                 </h1>
                             </div>
                             <div class="col-12 col-xl-auto mb-3">
-                                <a class="btn btn-sm btn-light text-primary" href="../produk/index.php">
+                                <a class="btn btn-sm btn-light text-primary" href="../brand/index.php">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left me-1">
                                         <line x1="19" y1="12" x2="5" y2="12"></line>
                                         <polyline points="12 19 5 12 12 5"></polyline>
@@ -57,57 +58,16 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
             <div class="container-xl px-4 mt-4">
                 <!-- Account details card-->
                 <div class="card mb-4">
-                    <div class="card-header">Tambah Jenis Produk</div>
+                    <div class="card-header">Edit Brand Produk</div>
                     <div class="card-body">
                         <form id="form" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="id" value="<?= $result['id'] ?>">
                             <!-- Form Row-->
-                            <div class="row gx-3 mb-3">
-                                <!-- Form Group (kode)-->
-                                <div class="col-md-12">
-                                    <label class="small mb-1" for="kode">Kode</label>
-                                    <input class="form-control" id="kode" name="kode" type="text" placeholder="Kode" />
-                                </div>
-                            </div>
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (nama)-->
                                 <div class="col-md-12">
                                     <label class="small mb-1" for="nama">Nama</label>
-                                    <input class="form-control" id="nama" name="nama" type="text" placeholder="Nama" />
-                                </div>
-                            </div>
-                            <div class="row gx-3 mb-3">
-                                <!-- Form Group (harga)-->
-                                <div class="col-md-12">
-                                    <label class="small mb-1" for="harga">Harga</label>
-                                    <input class="form-control" id="harga" name="harga" type="text" placeholder="Harga" />
-                                </div>
-                            </div>
-                            <div class="row gx-3 mb-3">
-                                <!-- Form Group (stok)-->
-                                <div class="col-md-12">
-                                    <label class="small mb-1" for="harga">Stok</label>
-                                    <input class="form-control" id="stok" name="stok" type="text" placeholder="Harga" />
-                                </div>
-                            </div>
-                            <div class="row gx-3 mb-3">
-                                <!-- Form Group (brand_produk)-->
-                                <div class="col-md-12">
-                                    <label class="small mb-1" for="brand_produk">Brand Produk</label>
-                                    <select class="form-control" id="brand_id" name="brand_id">
-                                        <option value="">Pilih Brand Produk</option>
-                                        <?php
-                                        foreach ($result as $row) {
-                                            echo "<option value='$row[id]'>$row[nama]</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row gx-3 mb-3">
-                                <!-- Form Group (gambar)-->
-                                <div class="col-md-12">
-                                    <label class="small mb-1" for="gambar">Gambar</label>
-                                    <input class="form-control" id="gambar" name="gambar" type="file" placeholder="Gambar" />
+                                    <input class="form-control" id="nama" name="nama" type="text" placeholder="Nama" value="<?= $result['nama'] ?>" />
                                 </div>
                             </div>
                             <button class="btn btn-primary" type="submit" id="tombol_submit">Simpan</button>
@@ -128,16 +88,13 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
     <script>
         $('#form').submit(function(e) {
             e.preventDefault();
-            var data = new FormData(this);
-            data.append('action', 'tambah');
+            var data = $('#form').serialize();
+            data += '&action=edit';
             $.ajax({
                 type: 'POST',
                 url: 'function.php',
                 data: data,
                 dataType: 'json',
-                processData: false,
-                contentType: false,
-                enctype: 'multipart/form-data',
                 beforeSend: function() {
                     $('#tombol_submit').prop("disabled", true);
                     $('#tombol_submit').text('Please wait...');
@@ -151,7 +108,12 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                             confirmButtonText: 'OK'
                         }).then(function() {
                             window.location.href = "index.php";
-
+                            $(form)[0].reset();
+                            setTimeout(function() {
+                                $('#tombol_submit').prop("disabled", false);
+                                $('#tombol_submit').html('Simpan');
+                                back();
+                            }, 2000);
                         });
                     } else {
                         Swal.fire({
